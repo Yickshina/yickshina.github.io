@@ -1,0 +1,7 @@
+{
+  "name": "yickshina.github.io",
+  "version": "1.0.0",
+  "dependencies": {
+    "googleapis": "^111.0.0"
+  }
+}

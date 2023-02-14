@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <title>Mercado Publico</title>
+    <link rel="stylesheet" type="text/css" href="css/button.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="text-center">Consulta de Licitaciones</h2>
+    <form>
+        <div class="form-group">
+            <label for="ID">ID:</label>
+            <input type="text" class="form-control" id="id" placeholder="Ingrese ID">
+        </div>
+        <button type="submit" class="btn btn-primary">Consultar</button>
+    </form>
+    <table class="table mt-5">
+        <thead>
+        <tr>
+            <th>Código Externo</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Fecra Creacion</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Cierre</th>
+            <th>Tiempo para el Cierre</th>
+            <th>Agregar Recordatorio</th>
+        </tr>
+        </thead>
+        <tbody id="resultados">
+        </tbody>
+    </table>
+</div>
+<script>
+    var fechaCreacion;
+    var fechaInicio;
+    var fechaCierre;
+    var nombre;
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            event.preventDefault();
+            var id = $('#id').val();
+            var url = 'https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo='+ id + '&ticket=AF6662A1-C4AA-4F52-A8E6-53C9C24CCDE3';
+            $.get(url, function(data) {
+                $('#resultados').empty();
+                for (var i = 0; i < data.Listado.length; i++) {
+                    var codigoExterno = data.Listado[i].CodigoExterno;
+                    var nombre = data.Listado[i].Nombre;
+                    var descripcion = data.Listado[i].Descripcion;
+                    var fechaCreacion = new Date(data.Listado[i].Fechas.FechaCreacion)
+                    var fechaInicio= new Date(data.Listado[i].Fechas.FechaInicio);
+                    var fechaCierre = new Date(data.Listado[i].Fechas.FechaCierre);
+                    var diffInMilliseconds = fechaCierre - new Date();
+                    var diffInSeconds = diffInMilliseconds / 1000;
+                    var diffInMinutes = diffInSeconds / 60;
+                    var diffInHours = diffInMinutes / 60;
+                    var diffInDays = diffInHours / 24;
+
+                    $('#resultados').append('<tr style="text-align:right;"><td>' + codigoExterno + '</td><td>' + nombre + '</td><td>' + descripcion + '</td><td>' + fechaCreacion.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+                        + '</td><td>' + fechaInicio.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '</td><td>' + fechaCierre.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '</td><td>' +  Math.floor(diffInDays) + ' dias y ' + Math.floor((diffInDays % 1)*24)  + ' horas'
+                        + '</td><td>' + '<button id="myButton"><img src="css/1160004.png" alt="Image"></button>' + '</td><td>');
+
+                }
+            });
+        });
+    });
+
+
+</script>
+<script src="js/js.js"></script>
+</body>
+</html>
