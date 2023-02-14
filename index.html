@@ -39,13 +39,6 @@
 <script src="js/bower_components/generate-google-calendar-link/index.js"></script>
 <script>
 
-
-
-    var fechaCreacion;
-    var fechaInicio;
-    var fechaCierre;
-    var nombre;
-    var descripcion;
     $(document).ready(function() {
         $('form').submit(function(event) {
             event.preventDefault();
@@ -55,38 +48,37 @@
                 $('#resultados').empty();
                 for (var i = 0; i < data.Listado.length; i++) {
                     var codigoExterno = data.Listado[i].CodigoExterno;
-                    nombre = data.Listado[i].Nombre;
-                    descripcion = data.Listado[i].Descripcion;
-                    fechaCreacion = new Date(data.Listado[i].Fechas.FechaCreacion)
-                    fechaInicio= new Date(data.Listado[i].Fechas.FechaInicio);
-                    fechaCierre = new Date(data.Listado[i].Fechas.FechaCierre);
+                    var nombre = data.Listado[i].Nombre;
+                    var descripcion = data.Listado[i].Descripcion;
+                    var fechaCreacion = new Date(data.Listado[i].Fechas.FechaCreacion)
+                    var fechaInicio= new Date(data.Listado[i].Fechas.FechaInicio);
+                    var fechaCierre = new Date(data.Listado[i].Fechas.FechaCierre);
                     var diffInMilliseconds = fechaCierre - new Date();
                     var diffInSeconds = diffInMilliseconds / 1000;
                     var diffInMinutes = diffInSeconds / 60;
                     var diffInHours = diffInMinutes / 60;
                     var diffInDays = diffInHours / 24;
-                    var timeToFinish;
-                    if(diffInDays < 0){
-                        timeToFinish = "Licitación Cerrada"
-                    }else{
-                        timeToFinish = Math.floor(diffInDays) + ' dias y ' + Math.floor((diffInDays % 1)*24)  + ' horas'
-                    }
                     var evento = generateLink({
                         start: fechaInicio,
                         end: fechaCierre,
                         title: 'Licitacion ' + nombre,
                         details: 'Licitacion correspondiente a ' + nombre + '/nDescripcion: '+ descripcion
                     })
+                    var timeToFinish;
+                    if(diffInHours < 0){
+                        timeToFinish = 'Licitación Finalizada'
+                    }else{
+                        timeToFinish= Math.floor(diffInDays) + ' Dias y ' + Math.floor((diffInDays % 1)*24) + ' Horas.'
+                    }
                     $('#resultados').append('<tr style="text-align:right;"><td>' + codigoExterno + '</td><td>' + nombre + '</td><td>' + descripcion + '</td><td>' + fechaCreacion.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-                        + '</td><td>' + fechaInicio.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '</td><td>' + fechaCierre.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '</td><td>' + timeToFinish
-                        < '</td><td>' + '<span id="result" ></span>' + '</td><td>');
+                        + '</td><td>' + fechaInicio.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '</td><td>' + fechaCierre.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '</td><td>'  + timeToFinish
+                        + '</td><td>' +'<span id="result" ></span>' + '</td><td>');
                     document.getElementById('result').appendChild(evento)
 
                 }
             });
         });
     });
-
 
 </script>
 
