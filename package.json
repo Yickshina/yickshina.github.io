@@ -1,7 +1,14 @@
 {
   "name": "yickshina.github.io",
   "version": "1.0.0",
+  "type": "commonjs",
+  "main": "js/js.js",
+  "scripts": {
+    "start": "node js/js.js"
+  },
   "dependencies": {
+    "generate-google-calendar-link": "^0.0.4",
+    "global": "^4.4.0",
     "googleapis": "^111.0.0"
   }
 }

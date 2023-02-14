@@ -1,0 +1,7 @@
+a.google-calendar-link {
+    background-image:url('calendar_add.png');
+    display: inline-block;
+    height: 16px;
+    margin-left: 1px;
+    width: 16px;
+}
